@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     public float jumpHeight = 10f;
     //private bool isGroundedB = true;
     public float rayDistance = 1f; //how long in units the ray will be below the player
+    public bool rotateToMainCam = false;
+    public LayerMask ignoreLayers;
+    public Transform weapon;
 
     
     // Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected
@@ -94,6 +97,17 @@ public class Player : MonoBehaviour
         float inputV = Input.GetAxis("Vertical") * speed; //this number will represent if we moved forward or back (between -1 and 1). Multiplied by speed to not alter y velocity later
         Vector3 moveDir = new Vector3(inputH, 0f, inputV); //get move direction from H & V getAxis, with no y movement.
 
+        //get euler angle of the camera relative to world
+        //NOTE THIS LINE DOESNT WORK UNLESS MAIN CAMERA IS TAGGED 'MAINCAMERA'
+        Vector3 camEuler = Camera.main.transform.eulerAngles;
+
+        if (rotateToMainCam)
+        {
+            
+            //change the move direction to be the camera direction around the Y-axis
+            moveDir = Quaternion.AngleAxis(camEuler.y, Vector3.up) * moveDir;
+        }
+
         Vector3 force = new Vector3(moveDir.x, rb.velocity.y, moveDir.z); //using this with speed multiply ends up accelerating you at a massive speed if you walk off the edge so dont do this (updates everytime)
        
 
@@ -108,6 +122,13 @@ public class Player : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(moveDir); //only look at quiternions in unity context. If moving in direction, rotate to that direction.
         }
+
+
+        Quaternion playerRotation = Quaternion.AngleAxis(camEuler.y, Vector3.up);
+        Quaternion weaponRotation = Quaternion.AngleAxis(camEuler.x, Vector3.right);
+        transform.rotation = playerRotation;
+        weapon.localRotation = weaponRotation;
+
 
     }
 

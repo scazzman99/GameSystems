@@ -9,7 +9,7 @@ public class CameraOrbit : MonoBehaviour {
     public Transform target;//target to orbit around
     public bool hideCursor = true; //is the curser hidden?
     [Header("Orbit")]
-    public Vector3 offset = new Vector3(0, 5f, 0); //offset for the camera
+    public Vector3 offset = new Vector3(0, 0, 0); //offset for the camera
     public float xSpeed = 120f; //x orbiting speed
     public float ySpeed = 120f; //y orbiting speed
     public float yMinLimit = -20f; //limiting y movement (CLAMPS)

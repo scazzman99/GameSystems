@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     public float seekRad = 5f;
     public State myState = State.Patrol; //default state of patrol
     public NavMeshAgent agent;
+    public float enemyHP = 20f;
 
     // Use this for initialization
     void Start()
@@ -81,6 +82,15 @@ public class Enemy : MonoBehaviour
             myState = State.Patrol;
         }
 
+    }
+
+    public void DealDamage(float damage)
+    {
+        enemyHP -= damage;
+        if(enemyHP <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
 
