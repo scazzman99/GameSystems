@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float rayDistance = 1f; //how long in units the ray will be below the player
     public bool rotateToMainCam = false;
     public LayerMask ignoreLayers;
-    public Transform weapon;
+    public Weapon currentWeapon;
 
     
     // Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected
@@ -27,11 +27,6 @@ public class Player : MonoBehaviour
 
 
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
 
@@ -93,6 +88,11 @@ public class Player : MonoBehaviour
         */
         #endregion
 
+        if (Input.GetButton("Fire1"))
+        {
+            currentWeapon.Attack();
+        }
+
         float inputH = Input.GetAxis("Horizontal") * speed; //this number will represent if we moved left or right (between -1 and 1). Multiplied by speed to not alter y velocity later
         float inputV = Input.GetAxis("Vertical") * speed; //this number will represent if we moved forward or back (between -1 and 1). Multiplied by speed to not alter y velocity later
         Vector3 moveDir = new Vector3(inputH, 0f, inputV); //get move direction from H & V getAxis, with no y movement.
@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
         Quaternion playerRotation = Quaternion.AngleAxis(camEuler.y, Vector3.up);
         Quaternion weaponRotation = Quaternion.AngleAxis(camEuler.x, Vector3.right);
         transform.rotation = playerRotation;
-        weapon.localRotation = weaponRotation;
+        currentWeapon.transform.localRotation = weaponRotation;
 
 
     }
