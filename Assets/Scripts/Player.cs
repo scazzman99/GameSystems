@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //REMEMBER: CTRL + K + D WILL CLEAN UP THE CODE
 public class Player : MonoBehaviour
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     public bool rotateToMainCam = false;
     public LayerMask ignoreLayers;
     public Weapon currentWeapon;
+    public Text ammoText;
 
     
     // Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected
@@ -87,10 +89,14 @@ public class Player : MonoBehaviour
         //There IS a way to condense this entire thing into roughly 3 lines
         */
         #endregion
-
+        
         if (Input.GetButton("Fire1"))
         {
-            currentWeapon.Attack();
+            if (currentWeapon.ammo > 0)
+            {
+                currentWeapon.Attack();
+                ammoText.text = "Ammo: " + currentWeapon.ammo;
+            }
         }
 
         float inputH = Input.GetAxis("Horizontal") * speed; //this number will represent if we moved left or right (between -1 and 1). Multiplied by speed to not alter y velocity later

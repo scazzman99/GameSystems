@@ -8,7 +8,7 @@ public abstract class Weapon : MonoBehaviour {
     public float acc = 1f;
     public float range = 10f;
     public float fireRate = 5f;
-    public int ammo = 30;
+    public int ammo = 10;
     public GameObject projectile;
     protected int currentAmmo = 0;
     public Transform spawnP;

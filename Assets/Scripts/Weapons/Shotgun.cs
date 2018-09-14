@@ -29,11 +29,12 @@ public class Shotgun : Weapon {
                 //instantiate new bullet from prefab bullet
                 GameObject clone = Instantiate(projectile, spawnP.position, spawnP.rotation);
                 //get the component from new bullet
-                Bullet newBullet = clone.GetComponent<Bullet>();
+                Grenade newBullet = clone.GetComponent<Grenade>();
                 //tell the bullet to fire in direction + spread variation
                 newBullet.Fire(dir + spread);
             }
             canFire = false;
+            ammo--;
             StartCoroutine(FireReset(1f));
         }
 
