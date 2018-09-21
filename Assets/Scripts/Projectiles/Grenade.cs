@@ -38,13 +38,16 @@ public class Grenade : Projectile {
     void Effects()
     {
         Instantiate(explosion, transform.position, transform.rotation);
+        
     }
 
-    public override void OnTriggerEnter(Collider other)
+    public override void OnCollisionEnter(Collision col)
     {
-        if (!other.CompareTag("Player")){
+        string tag = col.collider.tag;
+        if (tag != "Player" && tag != "Weapon"){
             Effects();
             Explode();
+            Destroy(gameObject);
         }
     }
 }

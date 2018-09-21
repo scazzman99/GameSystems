@@ -23,20 +23,9 @@ public abstract class Projectile : MonoBehaviour {
         projectile.AddForce(dir * projSpeed, ForceMode.Impulse);
     }
 
-    public virtual void OnTriggerEnter(Collider other)
+    public virtual void OnCollisionEnter(Collision col)
     {
-        //get enemy componenet
-        Enemy enemy = other.GetComponent<Enemy>();
-        //if it is an enemy
-
-        if (enemy)
-        {
-
-            enemy.DealDamage(damage);
-            //destroy bullet
-            Destroy(gameObject);
-            Debug.Log("Take damage");
-        }
+        
     }
 
 }

@@ -34,6 +34,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4934219273431552}
+  - component: {fileID: 114831451417002760}
   m_Layer: 9
   m_Name: Pistol
   m_TagString: Untagged
@@ -52,7 +53,6 @@ GameObject:
   - component: {fileID: 33174924765299618}
   - component: {fileID: 23421560860173924}
   - component: {fileID: 65668021197546394}
-  - component: {fileID: 114017566526536030}
   m_Layer: 9
   m_Name: Barrel
   m_TagString: Untagged
@@ -225,7 +225,7 @@ BoxCollider:
   m_GameObject: {fileID: 1863368522969992}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -241,12 +241,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114017566526536030
+--- !u!114 &114831451417002760
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1752635893965216}
+  m_GameObject: {fileID: 1115325320270552}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 099606cf3b998b0438ec74c1e9b5fe4e, type: 3}
@@ -256,6 +256,6 @@ MonoBehaviour:
   acc: 1
   range: 10
   fireRate: 5
-  ammo: 30
-  projectile: {fileID: 0}
-  spawnP: {fileID: 0}
+  ammo: 10
+  projectile: {fileID: 1645818367919782, guid: 8f05abf18a4ae2944896f23780b4dd4f, type: 2}
+  spawnP: {fileID: 4578313169822824}

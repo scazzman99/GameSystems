@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //REMEMBER: CTRL + K + D WILL CLEAN UP THE CODE
+
+/*
+ * 1) Weapon Cycles
+ * 2). Interaction System
+ */
 public class Player : MonoBehaviour
 {
     // dont forget the f at end of nums for float e.g. 10f
@@ -13,11 +18,26 @@ public class Player : MonoBehaviour
     //private bool isGroundedB = true;
     public float rayDistance = 1f; //how long in units the ray will be below the player
     public bool rotateToMainCam = false;
+    public bool rotateWeapon = false;
     public LayerMask ignoreLayers;
-    public Weapon currentWeapon;
+    public Weapon[] weapons;
+    private Weapon currentWeapon;
+    private Vector3 moveDir = Vector3.zero;
     public Text ammoText;
+    private bool isJumping;
+    private Interactable interactObject;
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        interactObject = other.GetComponent<Interactable>();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        interactObject = null;
+    }
+
+
     // Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected
     private void OnDrawGizmos()
     {
@@ -36,7 +56,7 @@ public class Player : MonoBehaviour
     {
         Ray groundRay = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
-        if(Physics.Raycast(groundRay, out hit, rayDistance)) //out modifier fills the variable with data from outside the function. checks for any raycast hit
+        if (Physics.Raycast(groundRay, out hit, rayDistance)) //out modifier fills the variable with data from outside the function. checks for any raycast hit
         {
             return true;
         }
@@ -89,19 +109,10 @@ public class Player : MonoBehaviour
         //There IS a way to condense this entire thing into roughly 3 lines
         */
         #endregion
-        
-        if (Input.GetButton("Fire1"))
-        {
-            if (currentWeapon.ammo > 0)
-            {
-                currentWeapon.Attack();
-                ammoText.text = "Ammo: " + currentWeapon.ammo;
-            }
-        }
 
-        float inputH = Input.GetAxis("Horizontal") * speed; //this number will represent if we moved left or right (between -1 and 1). Multiplied by speed to not alter y velocity later
-        float inputV = Input.GetAxis("Vertical") * speed; //this number will represent if we moved forward or back (between -1 and 1). Multiplied by speed to not alter y velocity later
-        Vector3 moveDir = new Vector3(inputH, 0f, inputV); //get move direction from H & V getAxis, with no y movement.
+
+
+
 
         //get euler angle of the camera relative to world
         //NOTE THIS LINE DOESNT WORK UNLESS MAIN CAMERA IS TAGGED 'MAINCAMERA'
@@ -109,18 +120,19 @@ public class Player : MonoBehaviour
 
         if (rotateToMainCam)
         {
-            
+
             //change the move direction to be the camera direction around the Y-axis
             moveDir = Quaternion.AngleAxis(camEuler.y, Vector3.up) * moveDir;
         }
 
         Vector3 force = new Vector3(moveDir.x, rb.velocity.y, moveDir.z); //using this with speed multiply ends up accelerating you at a massive speed if you walk off the edge so dont do this (updates everytime)
-       
 
-        if (Input.GetButton("Jump") && isGrounded()) //using get button for universal use.
+        if (isJumping && isGrounded()) //using get button for universal use.
         {
             force.y = jumpHeight;
+            isJumping = false;
         }
+
 
         rb.velocity = force; //give rigid body a velocity in given direction and multiply velocity vector by speed (moveDir * speed) or by just using 'force' which is updating.
 
@@ -131,10 +143,12 @@ public class Player : MonoBehaviour
 
 
         Quaternion playerRotation = Quaternion.AngleAxis(camEuler.y, Vector3.up);
-        Quaternion weaponRotation = Quaternion.AngleAxis(camEuler.x, Vector3.right);
         transform.rotation = playerRotation;
-        currentWeapon.transform.localRotation = weaponRotation;
-
+        if (rotateWeapon)
+        {
+            Quaternion weaponRotation = Quaternion.AngleAxis(camEuler.x, Vector3.right);
+            currentWeapon.transform.localRotation = weaponRotation;
+        }
 
     }
 
@@ -146,4 +160,67 @@ public class Player : MonoBehaviour
             isGroundedB = true;
         }
     }*/
+
+    public void DisableAllWeapons()
+    {
+        //Loop through all weapons at start
+        //deactivate weapon gameobject
+        foreach (Weapon weapon in weapons)
+        {
+            weapon.gameObject.SetActive(false);
+        }
+    }
+
+    //selects and switches out the current weapon
+    public void SelectWeapon(int index)
+    {
+        //check the index is within bounds
+        //is within range 0 <= i < length
+        //is not within range i < 0 || i >= length
+        if (index < 0 || index >= weapons.Length)
+        {
+            return;
+        }
+
+        //DisableAllWeapons
+        DisableAllWeapons();
+        //Enable weapon at index
+        weapons[index].gameObject.SetActive(true);
+
+        //set the curernt weapon
+        currentWeapon = weapons[index];
+    }
+
+    public void Attack()
+    {
+
+        if (currentWeapon.ammo > 0)
+        {
+            currentWeapon.Attack();
+            ammoText.text = "Ammo: " + currentWeapon.ammo;
+        }
+
+    }
+
+    public void Move(float inputH, float inputV)
+    {
+
+        moveDir = new Vector3(inputH, 0f, inputV); //get move direction from H & V getAxis, with no y movement.
+        moveDir *= speed;
+    }
+
+    public void Jump()
+    {
+        isJumping = true;
+    }
+
+    public void Interact()
+    {
+        //if we have a an object to call
+        if (interactObject)
+        {
+            //run interact
+            interactObject.Interact();
+        }
+    }
 }

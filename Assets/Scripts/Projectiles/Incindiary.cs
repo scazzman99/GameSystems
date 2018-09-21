@@ -31,14 +31,15 @@ public class Incindiary : Projectile
         }
     }
 
-    public override void OnTriggerEnter(Collider other)
+    public override void OnCollisionEnter(Collision col)
     {
-        Enemy enemy = other.GetComponent<Enemy>();
+        Enemy enemy = col.gameObject.GetComponent<Enemy>();
         // Turn off collision (CollideR)
         // Turn off effects (MeshRenderer, ParticleSystem, etc)
         if (enemy)
         {
             StartCoroutine(Burn(enemy));
+
         }
     }
 }
