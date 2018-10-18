@@ -23,9 +23,13 @@ namespace BigFlap
             Instance = null;
         }
         #endregion
-
+        public int score = 0;
         public bool isGameOver = false;
 
+        //subscriber listener
+        public delegate void IntCallBack(int number);
+        //this is a container that people can subscribe to (if invoked scripts will know about it)
+        public IntCallBack scoreAdded;
 
         // Use this for initialization
         void Start()
@@ -37,6 +41,18 @@ namespace BigFlap
         void Update()
         {
 
+        }
+
+        public void AddScore(int scoreToAdd)
+        {
+            if (isGameOver)
+            {
+                return;
+            }
+            score += scoreToAdd;
+
+            //Call subscribers
+            scoreAdded.Invoke(score);
         }
     }
 }
